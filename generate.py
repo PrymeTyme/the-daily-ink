@@ -9,23 +9,22 @@ from io import BytesIO
 import random
 from html2image import Html2Image
 
-# Umgebungsvariablen laden
+
 load_dotenv()
 
-# --- INITIALISIERUNG ---
-# Für GitHub Actions oder Linux-Server muss der Pfad oft nicht explizit angegeben werden.
-# Wir setzen ein Fallback für lokale Windows-Tests.
+# --- INITIALISATION ---
+#
 try:
     edge_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
     if os.path.exists(edge_path):
         hti = Html2Image(browser_executable=edge_path)
     else:
-        hti = Html2Image() # Nutzt den Standard-Browser (Chrome/Chromium) im System
+        hti = Html2Image() 
 except Exception as e:
     print(f"Error initializing browser: {e}")
     exit(1)
 
-# --- CONTENT MODULES (Unverändert) ---
+# --- CONTENT MODULES ---
 
 def get_weather():
     api_key = os.getenv("OPENWEATHER_API_KEY")
@@ -213,7 +212,19 @@ def generate_newspaper():
     
     print("Rendering PNG...")
     output_filename = 'newspaper.png'
-    hti.screenshot(html_str=html, save_as=output_filename, size=(480, 800))
+    
+    # 1. Save the HTML content to a physical file
+    with open("index.html", "w", encoding="utf-8") as f:
+        f.write(html)
+        
+    # 2. Generate the absolute local file URL
+    import os
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+    file_url = f"file:///{os.path.join(current_dir, 'index.html').replace(chr(92), '/')}"
+    
+    # 3. Take the screenshot using the file URL, keeping your strict size!
+    hti.screenshot(url=file_url, save_as=output_filename, size=(480, 800))
+    
     print(f"Success! Saved to {output_filename}")
 
 if __name__ == '__main__':
