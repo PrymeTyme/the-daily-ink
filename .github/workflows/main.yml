@@ -43,5 +43,5 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add -f newspaper.png
-        git commit --allow-empty -m "Auto-update newspaper: $(date -u)"
-        git push
+        git commit -m "Auto-update newspaper: $(date -u)" || true
+        git push origin HEAD:main
