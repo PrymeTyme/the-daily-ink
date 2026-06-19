@@ -1,4 +1,6 @@
 name: Generate The Daily Ink
+env:
+  OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
 
 on:
   
