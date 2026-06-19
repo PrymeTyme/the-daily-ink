@@ -1,0 +1,53 @@
+name: Generate The Daily Ink
+
+on:
+  
+  schedule:
+    - cron: '*/5 * * * *'
+  
+  
+  workflow_dispatch: 
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install System Dependencies (Chromium)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser
+
+    - name: Install Python Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Generate Newspaper
+      run: |
+        python generate.py
+
+    - name: Commit and Push Image
+      run: |
+        
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        
+        git add newspaper.png
+        
+      
+        git commit -m "Auto-generate daily ink [skip ci]" || echo "No changes to commit"
+        
+        
+        git push
