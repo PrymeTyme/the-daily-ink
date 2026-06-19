@@ -1,13 +1,8 @@
 name: Generate The Daily Ink
-env:
-  OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
 
 on:
-  
   schedule:
     - cron: '*/5 * * * *'
-  
-  
   workflow_dispatch: 
 
 permissions:
@@ -36,20 +31,17 @@ jobs:
         pip install -r requirements.txt
 
     - name: Generate Newspaper
+      env:
+        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+        # Die Stadt wird als Repository Variable (nicht Secret) übergeben
+        WEATHER_CITY: ${{ vars.WEATHER_CITY }} 
       run: |
         python generate.py
 
     - name: Commit and Push Image
       run: |
-        
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        
-        
         git add -f newspaper.png
-        
-      
-        git commit -m "Auto-generate daily ink [skip ci]" || echo "No changes to commit"
-        
-        
+        git commit --allow-empty -m "Auto-update newspaper: $(date -u)"
         git push

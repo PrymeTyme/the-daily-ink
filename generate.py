@@ -29,10 +29,13 @@ except Exception as e:
 
 def get_weather():
     api_key = os.getenv("OPENWEATHER_API_KEY")
-    CITY = "Schwarzach, AT"
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={api_key}&units=metric&lang=en"
+    
+    city = os.getenv("WEATHER_CITY", "Berlin, DE") 
+    
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric&lang=en"
     try:
         response = requests.get(url, timeout=5)
+        response.raise_for_status() 
         data = response.json()
         return f"{round(data['main']['temp'])}°C, {data['weather'][0]['description'].title()}"
     except:
