@@ -2,8 +2,9 @@ name: Generate The Daily Ink
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
-  workflow_dispatch: 
+    # Runs at 03:00 UTC (5:00 AM local time in summer) every day
+    - cron: '0 3 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
