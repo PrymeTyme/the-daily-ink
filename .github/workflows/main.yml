@@ -44,7 +44,7 @@ jobs:
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
         
-        git add newspaper.png
+        git add -f newspaper.png
         
       
         git commit -m "Auto-generate daily ink [skip ci]" || echo "No changes to commit"
