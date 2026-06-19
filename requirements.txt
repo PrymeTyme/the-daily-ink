@@ -1,0 +1,6 @@
+Flask==3.0.0
+html2image==2.0.4.3
+requests==2.31.0
+feedparser==6.0.10
+python-dotenv==1.0.0
+Pillow==10.0.1
