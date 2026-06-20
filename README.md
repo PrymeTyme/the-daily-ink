@@ -1,4 +1,5 @@
 # The Daily Ink
+![Preview of my Newspaper](assets/di6.png)
 
 A minimalist, fully automated digital newspaper designed for E-Ink displays. It fetches daily knowledge, news, weather, and a comic strip, rendering them into a clean, pixel-perfect, vintage newspaper layout.
 
