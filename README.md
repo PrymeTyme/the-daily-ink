@@ -28,57 +28,79 @@ the-daily-ink/
 ├── requirements.txt       # Python dependencies
 └── .github/workflows/
     └── main.yml           # GitHub Actions automation schedule
+```
 
- Quick Start (Local Testing)
+---
+
+##  Quick Start (Local Testing)
+
 If you want to run or test the generator on your local PC:
-1. Clone the repository:
 
-Bash
+**1. Clone the repository:**
+```bash
 git clone [https://github.com/PrymeTyme/the-daily-ink.git](https://github.com/PrymeTyme/the-daily-ink.git)
 cd the-daily-ink
-2. Create a virtual environment and install dependencies:
-Bash
+```
 
+**2. Create a virtual environment and install dependencies:**
+```bash
 python -m venv venv
+
 # On Windows:
 .\venv\Scripts\activate
+
 # On Mac/Linux:
 source venv/bin/activate
 
 pip install -r requirements.txt
-3. Set up local environment variables: Create a .env file in the root directory and add your keys:
-Plaintext
+```
 
+**3. Set up local environment variables:** Create a `.env` file in the root directory and add your keys:
+```text
 OPENWEATHER_API_KEY=your_api_key_here
 WEATHER_CITY=Bregenz, AT
+```
 
-4. Generate a test newspaper:
-
-Bash
+**4. Generate a test newspaper:**
+```bash
 python generate.py
-(This will output a newspaper.png file in your directory).
- GitHub Actions Setup (Server)
+```
+*(This will output a `newspaper.png` file in your directory).*
+
+---
+
+##  GitHub Actions Setup (Server)
+
 To automate the daily generation in the cloud:
 
-1.	Go to your GitHub Repository Settings -> Secrets and variables -> Actions.
-2.	Secrets Tab: Add a new secret named OPENWEATHER_API_KEY with your OpenWeatherMap API key.
-3.	Variables Tab: Add a new variable named WEATHER_CITY with your target location (e.g., Bregenz, AT - do not use quotes).
-4.	The GitHub Action will automatically run every day at 03:00 UTC (05:00 AM local summer time) and commit the fresh newspaper.png directly to the main branch.
+1. Go to your GitHub Repository **Settings** -> **Secrets and variables** -> **Actions**.
+2. **Secrets Tab:** Add a new secret named `OPENWEATHER_API_KEY` with your OpenWeatherMap API key.
+3. **Variables Tab:** Add a new variable named `WEATHER_CITY` with your target location (e.g., `Bregenz, AT` - *do not use quotes*).
+4. The GitHub Action will automatically run every day at 03:00 UTC (05:00 AM local summer time) and commit the fresh `newspaper.png` directly to the `main` branch.
 
- Raspberry Pi Zero Setup (Client)
+---
+
+##  Raspberry Pi Zero Setup (Client)
+
 The Pi simply wakes up, grabs the image from GitHub, and pushes it to the Inky display.
 
-1. SSH into your Raspberry Pi and edit your crontab:
-Bash
+**1. SSH into your Raspberry Pi and edit your crontab:**
+```bash
 crontab -e
-2. Add the daily cronjob: (This runs at 5:15 AM local time, uses the pimoroni virtual environment, and logs output to cron.log)
-Bash
+```
 
+**2. Add the daily cronjob:** *(This runs at 5:15 AM local time, uses the `pimoroni` virtual environment, and logs output to `cron.log`)*
+```bash
 15 5 * * * /home/admin/.virtualenvs/pimoroni/bin/python /home/admin/newspaper_client/update_display.py >> /home/admin/newspaper_client/cron.log 2>&1
+```
 
- Disclaimer & Copyright
+---
+
+##  Disclaimer & Copyright
+
 This project acts purely as an aggregator for personal, non-commercial use.
-•	XKCD Comics: Comic strips are fetched from xkcd.com and are licensed under the Creative Commons Attribution-NonCommercial 2.5 License.
-•	News & APIs: All news headlines, historical facts, and weather data belong to their respective creators and APIs (e.g., Wikipedia, The Verge, OpenWeatherMap, Wordnik, ZenQuotes, Muffinlabs History API).
+
+* **XKCD Comics:** Comic strips are fetched from [xkcd.com](https://xkcd.com) and are licensed under the Creative Commons Attribution-NonCommercial 2.5 License.
+* **News & APIs:** All news headlines, historical facts, and weather data belong to their respective creators and APIs (e.g., Wikipedia, The Verge, OpenWeatherMap, Wordnik, ZenQuotes, Muffinlabs History API).
 
 Please ensure you comply with the terms of service of the respective APIs if you modify the fetch requests.
