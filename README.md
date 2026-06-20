@@ -1,5 +1,14 @@
 # The Daily Ink
-![Preview of my Newspaper](assets/di6.png)
+<table>
+  <tr>
+    <td>
+      <img src="assets/di6.png" width="200" alt="Newspaper Layout 1">
+    </td>
+    <td>
+      <img src="assets/di8.png" width="200" alt="Newspaper Layout 2">
+    </td>
+  </tr>
+</table>
 
 A minimalist, fully automated digital newspaper designed for E-Ink displays. It fetches daily knowledge, news, weather, and a comic strip, rendering them into a clean, pixel-perfect, vintage newspaper layout.
 
