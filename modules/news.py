@@ -2,6 +2,13 @@ import requests
 import feedparser
 import re
 from datetime import datetime
+import xml.etree.ElementTree as ET
+
+def strip_html(text):
+    """Universal function to remove all HTML tags."""
+    if not text: return ""
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text).strip()
 
 def fetch_wiki_module():
     date_str = datetime.now().strftime("%Y/%m/%d")
@@ -26,7 +33,8 @@ def fetch_verge_module():
         feed = feedparser.parse(url)
         if feed.entries:
             entry = feed.entries[0]
-            clean_text = re.sub('<[^<]+?>', '', entry.get('summary', ''))
+            # Use universal strip_html
+            clean_text = strip_html(entry.get('summary', ''))
             return {"title": "The Verge", "text": f"{entry.title}: {clean_text[:150]}..."}
     except Exception as e:
         print(f"Verge RSS Error: {e}")
@@ -36,7 +44,8 @@ def fetch_history_module():
     url = "https://history.muffinlabs.com/date"
     try:
         events = requests.get(url, timeout=5).json()['data']['Events']
-        selected_events = [{"year": e['year'], "text": e['text']} for e in events if len(e['text']) < 150][:2]
+        # Use strip_html here too to be safe
+        selected_events = [{"year": e['year'], "text": strip_html(e['text'])} for e in events if len(e['text']) < 150][:2]
         return {"title": "On This Day", "items": selected_events}
     except Exception as e:
         print(f"History API Error: {e}")
@@ -48,12 +57,31 @@ def fetch_sports_module():
         feed = feedparser.parse(url)
         if feed.entries:
             items = []
-            # FIX: Changed from [:2] to [:1] to only grab the single top headline
             for entry in feed.entries[:1]:
-                clean_text = re.sub('<[^<]+?>', '', entry.get('summary', ''))
-                # FIX: Shortened the summary from 90 characters down to 60
-                items.append({"title": entry.title, "summary": f"{clean_text[:60]}..."})
+                clean_text = strip_html(entry.get('summary', ''))
+                items.append({"title": entry.title, "summary": f"{clean_text[:150]}..."})
             return items
     except Exception as e:
         print(f"Sports RSS Error: {e}")
     return [{"title": "Scores unavailable.", "summary": ""}]
+
+def fetch_good_news_module():
+    """Fetches good news and strips out all HTML and URLs."""
+    try:
+        url = "https://www.goodnewsnetwork.org/feed/"
+        headers = {"User-Agent": "TheDailyInk/1.0"}
+        response = requests.get(url, headers=headers, timeout=5)
+        
+        root = ET.fromstring(response.content)
+        item = root.find('.//item')
+        title = strip_html(item.find('title').text)
+        summary = strip_html(item.find('description').text)
+        
+        # Final cleanup for common RSS artifacts
+        summary = summary.replace("[&hellip;]", "...").strip()
+        
+        return {"title": title, "text": summary}
+        
+    except Exception as e:
+        print(f"Good News Network Error: {e}")
+        return {"title": "Daily Positivity", "text": "Everything is going to be okay today."}

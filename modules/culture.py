@@ -2,6 +2,7 @@ import requests
 import random
 from PIL import Image
 from io import BytesIO
+import xml.etree.ElementTree as ET
 
 def fetch_facts_module():
     url = "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en"
@@ -9,7 +10,7 @@ def fetch_facts_module():
     for _ in range(2):
         try:
             response = requests.get(url, timeout=3)
-            # Catch Redis snapshot failures or invalid responses gracefully
+            
             if response.status_code != 200 or "MISCONF Redis" in response.text:
                 facts.append("The first modern alarm clock could only ring at 4 a.m.")
                 continue
@@ -20,19 +21,20 @@ def fetch_facts_module():
     return facts
 
 def fetch_word_module():
-    # Fallback structure matching wordnik output format natively
-    default_word = {"word": "Serendipity", "def": "The occurrence of events by chance in a happy way."}
-    api_key = "YOUR_API_KEY" # Replace if you own a valid Wordnik registration string
-    if api_key == "YOUR_API_KEY":
-        return default_word
-
+    """Fetches a definition for a random word of the day."""
+    
+    word_list = ["serendipity", "ephemeral", "luminous", "resilience", "eloquent"]
+    word = random.choice(word_list)
+    
     try:
-        url = f"https://api.wordnik.com/v4/words.json/wordOfTheDay?api_key={api_key}"
+        url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
         data = requests.get(url, timeout=3).json()
-        return {"word": data['word'], "def": data['definitions'][0]['text']}
-    except Exception as e:
-        print(f"Wordnik API Error: {e}")
-        return default_word
+        
+        
+        definition = data[0]['meanings'][0]['definitions'][0]['definition']
+        return {"word": word.capitalize(), "def": definition}
+    except:
+        return {"word": "Serendipity", "def": "The occurrence of events by chance in a happy way."}
 
 def fetch_quote_module():
     try:
@@ -66,3 +68,63 @@ def fetch_joke_module():
     except Exception as e:
         print(f"Joke API Error: {e}")
     return {"setup": "Why do programmers prefer dark mode?", "punchline": "Because light attracts bugs."}
+
+import requests
+
+def fetch_recipe_module():
+    """Fetches a random recipe and formats its ingredient list from TheMealDB."""
+    try:
+        response = requests.get("https://www.themealdb.com/api/json/v1/1/random.php", timeout=5)
+        data = response.json()["meals"][0]
+        
+        title = data["strMeal"]
+        category = data["strCategory"]
+        
+       
+        ingredients = []
+        for i in range(1, 21):
+            ingredient = data.get(f"strIngredient{i}")
+            measure = data.get(f"strMeasure{i}")
+            
+            
+            if ingredient and ingredient.strip():
+                
+                measure_text = measure.strip() if measure else ""
+                ingredients.append(f"{measure_text} {ingredient.strip()}")
+        
+        
+        ingredients_html = "".join([f"<li>{item}</li>" for item in ingredients])
+        
+        
+        output = f"""
+        <div style="font-weight:700; text-align:center; font-family:'Oswald', sans-serif; margin-bottom:6px;">
+            {title} ({category})
+        </div>
+        <ul style="margin: 0; padding-left: 15px; font-size: 11px;">
+            {ingredients_html}
+        </ul>
+        """
+        
+        return output
+        
+    except Exception as e:
+        print(f"Recipe API Error: {e}")
+        return "Kitchen closed for maintenance."
+
+def fetch_poem_module():
+    """Fetches a random classic poem from PoetryDB."""
+    try:
+        
+        response = requests.get("https://poetrydb.org/random", timeout=5)
+        data = response.json()[0] 
+        
+        title = data.get("title", "Unknown")
+        author = data.get("author", "Unknown")
+        
+        lines = " / ".join(data.get("lines", [])[:8]) 
+        
+        return f"<b>{title}</b><br>by {author}<br><i style='font-size:10px;'>{lines}...</i>"
+        
+    except Exception as e:
+        print(f"Poem API Error: {e}")
+        return "<i>Poetry is currently unavailable.</i>"    
