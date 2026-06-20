@@ -94,6 +94,49 @@ python generate.py
 ```
 
 ---
+## Customizing the Layout & Adding Modules
+
+The Daily Ink uses a highly fluid Flexbox layout. You don't need to touch complex CSS Grid matrices to redesign your paper. **Python supplies the data, and HTML organizes the space.**
+
+### 1. Moving Existing Modules
+To rearrange the newspaper, open `templates/layout.html`. 
+The middle of the paper is divided into two buckets: `<div class="col-left">` and `<div class="col-right">`. 
+
+Every piece of news is wrapped in a `<div class="news-block">`. To move a module (e.g., moving Sports from the right to the left), simply cut the entire `<div class="news-block">...</div>` and paste it into the other column. 
+*Note: The layout is smart. Whichever `news-block` is placed at the very bottom of a column will automatically anchor itself to the bottom of the page.*
+
+### 2. Adding a Completely New Module
+Adding your own custom data feed takes three quick steps:
+
+**Step 1: Get the data (Python)**
+Create a new function (e.g., in `modules/culture.py`) to fetch your data and return it as a formatted string. 
+In `generate.py`, call your function:
+```python
+quote_text = fetch_quote_module()
+```
+
+**Step 2: Map the variables (Python)**
+In `generate.py`, locate the `replacements` dictionary and map your new data to an HTML tag:
+```python
+replacements = {
+    # ... existing variables ...
+    "{quote_text}": quote_text 
+}
+```
+
+**Step 3: Drop it into the layout (HTML)**
+Open `templates/layout.html` and paste a new block wherever you want it to appear (in `col-left` or `col-right`):
+```html
+<div class="news-block">
+    <h2>Quote of the Day</h2>
+    <div class="news-content">
+        {quote_text}
+    </div>
+</div>
+```
+
+### 3. Handling Long Text Walls
+If an API gives you a massive wall of text that pushes other modules off the e-ink screen, use the built-in text limiters. Add `limit-text-short` (max 8 lines) or `limit-text-long` (max 14 lines) to the class of your text div. It will automatically truncate the text with an elegant `...` if it overflows.
 
 ##  Project Structure
 

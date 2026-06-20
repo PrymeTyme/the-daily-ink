@@ -3,73 +3,125 @@
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Merriweather', serif; margin: 0; padding: 0; width: 480px; height: 800px; background: white; display: flex; justify-content: center; }
-        .newspaper-wrapper { width: 450px; padding: 15px 0; box-sizing: border-box; display: flex; flex-direction: column; }
-        .header { text-align: center; border-top: 4px solid black; border-bottom: 5px double black; padding: 10px 0; margin-bottom: 15px; }
-        .title { font-family: 'Oswald', sans-serif; font-size: 44px; text-transform: uppercase; font-weight: 700; line-height: 1; }
-        .meta { font-family: 'Oswald', sans-serif; font-size: 11px; display: flex; justify-content: space-between; border-top: 1px solid black; padding-top: 4px; margin-top: 6px; }
-        .columns { display: flex; gap: 0; height: 490px; overflow: hidden; margin-bottom: 10px; }
-        .col-left { flex: 1.8; border-right: 2px solid black; display: flex; flex-direction: column; justify-content: space-between; padding-right: 13px; }
-        .col-right { flex: 1; padding-left: 15px; }
-        h2 { font-family: 'Oswald', sans-serif; font-size: 14px; border-bottom: 2px solid black; text-transform: uppercase; text-align: center; margin: 0 0 10px 0; padding-bottom: 4px; }
+        body { 
+            font-family: 'Merriweather', 'Georgia', serif; 
+            margin: 0; padding: 0; width: 480px; height: 800px; background: white; 
+            display: flex; justify-content: center; overflow: hidden; 
+        }
+        
+        .newspaper-wrapper { 
+            width: 450px; padding-top: 15px; height: 785px; 
+            display: flex; flex-direction: column; 
+        }
+
+        .middle-section { display: flex; flex-grow: 1; gap: 15px; overflow: hidden; margin-bottom: 8px; }
+        .col-left { flex: 1.8; display: flex; flex-direction: column; gap: 12px; }
+        .col-right { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .vertical-line { width: 2px; background-color: black; flex-shrink: 0; }
+
+        /* Block Behaviors */
+        .news-block { display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* OPTION 2: The Automatic Bottom Anchor */
+        /* OPTION 2: The Automatic Bottom Anchor */
+        .news-block:last-child {
+            margin-top: auto; 
+            flex-shrink: 0;
+        }
+
+        /* Text Limiters */
+        .limit-text-long {
+            display: -webkit-box;
+            -webkit-line-clamp: 14; 
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .limit-text-short {
+            display: -webkit-box;
+            -webkit-line-clamp: 8; 
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .area-header  { text-align: center; border-top: 4px solid black; border-bottom: 5px double black; padding: 10px 0; margin-bottom: 12px; flex-shrink: 0; }
+        .area-joke    { text-align: center; padding: 8px 0; font-size: 11px; font-style: italic; flex-shrink: 0; }
+        .area-comic   { border-top: 5px double black; padding-top: 8px; height: 135px; display: flex; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        
+        /* Typography */
+        .title { font-family: 'Oswald', 'Impact', sans-serif; font-size: 44px; text-transform: uppercase; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+        .meta { font-family: 'Oswald', 'Arial Narrow', sans-serif; font-size: 11px; display: flex; justify-content: space-between; border-top: 1px solid black; padding-top: 4px; }
+        h2 { font-family: 'Oswald', 'Impact', sans-serif; font-size: 14px; border-bottom: 2px solid black; text-transform: uppercase; text-align: center; margin: 0 0 8px 0; padding-bottom: 4px; }
         ul { padding-left: 15px; margin: 0; }
-        li { margin-bottom: 8px; font-size: 11px; font-weight: 700; font-family: 'Merriweather', serif; }
-        p { margin: 0 0 10px 0; font-family: 'Merriweather', serif; }
-        .dropcap:first-letter { float: left; font-size: 38px; font-family: 'Oswald', sans-serif; padding-right: 6px; line-height: 0.8; }
-        .comic-wrapper { border-top: 5px double black; padding-top: 8px; }
-        .comic-img { width: 100%; height: 125px; object-fit: contain; filter: grayscale(100%) contrast(1.2); }
-        .quote { font-size: 11px; font-style: italic; text-align: center; margin-bottom: 8px; font-family: 'Merriweather', serif; }
-        .news-block { margin-top: 15px; }
-        .news-content { font-family: 'Merriweather', serif; font-weight: 700; font-size: 11px; line-height: 1.4; margin: 0; }
+        li { margin-bottom: 8px; font-size: 11px; font-weight: 700; }
+        p { margin: 0 0 10px 0; font-size: 11px;}
+        .dropcap:first-letter { float: left; font-size: 38px; font-family: 'Oswald', 'Impact', sans-serif; padding-right: 6px; line-height: 0.8; }
+        .news-content { font-weight: 700; font-size: 11px; line-height: 1.4; margin: 0; }
+        .comic-img { max-width: 100%; height: 130px; object-fit: contain; filter: grayscale(100%) contrast(1.2); }
     </style>
 </head>
 <body>
     <div class="newspaper-wrapper">
-        <div class="header">
+        
+        <div class="area-header">
             <div class="title">The Daily Ink</div>
             <div class="meta">
-                <span>VOL. I ... NO. 1</span>
+                <span>BTC: {crypto_btc} | ETH: {crypto_eth}</span>
                 <span>{date}</span>
                 <span>{weather}</span>
             </div>
         </div>
-        <div class="columns">
+
+        <div class="middle-section">
+            
             <div class="col-left">
-                <div>
+                <div class="news-block">
                     <h2>Daily Wiki</h2>
                     <div style="font-weight:700; text-align:center; font-family:'Oswald', sans-serif; margin-bottom:6px;">{wiki_title}</div>
-                    <p class="dropcap" style="font-weight:700; font-size:11.5px;">{wiki_text}</p>
+                    <p class="dropcap limit-text-long" style="font-weight:700; font-size:11.5px;">{wiki_text}</p>
                 </div>
-                <div class="news-block" style="margin-top: 10px; margin-bottom: 10px;">
+                
+                <div class="news-block">
                     <h2>{history_title}</h2>
-                    <div class="news-content">
-                        {history_items}
-                    </div>
+                    <div class="news-content limit-text-short">{history_items}</div>
                 </div>
-                <div style="margin-top: auto; border-top: 2px solid black; padding-top: 8px;">
+
+                <div class="news-block">
                     <div style="font-family:'Oswald', sans-serif; font-size: 13px; font-weight:700; text-transform: uppercase; margin-bottom: 2px;">
                         Word of the Day: {word_name}
                     </div>
-                    <div style="font-size: 11px; font-style: italic; line-height: 1.3;">
-                        {word_def}
-                    </div>
+                    <div style="font-size: 11px; font-style: italic; line-height: 1.3;">{word_def}</div>
                 </div>
             </div>
+
+            <div class="vertical-line"></div>
+
             <div class="col-right">
-                <h2>Did You Know?</h2>
-                <ul>{facts_list}</ul>
+                <div class="news-block">
+                    <h2>Did You Know?</h2>
+                    <ul>{facts_list}</ul>
+                </div>
+                
+                <div class="news-block">
+                    <h2>Sports Desk</h2>
+                    <div class="news-content limit-text-short">{sports_items}</div>
+                </div>
+
                 <div class="news-block">
                     <h2>{news_title}</h2>
-                    <div class="news-content">
-                        {news_text}
-                    </div>
+                    <div class="news-content limit-text-long">{news_text}</div>
                 </div>
             </div>
+
         </div>
-        <div class="quote">"{quote_text}"</div>
-        <div class="comic-wrapper">
+
+        <div class="area-joke">
+            <b>{joke_setup}</b> {joke_punchline}
+        </div>
+        
+        <div class="area-comic">
             <img class="comic-img" src="{comic_url}">
         </div>
+        
     </div>
 </body>
 </html>

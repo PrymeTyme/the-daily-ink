@@ -6,7 +6,7 @@ from io import BytesIO
 def fetch_facts_module():
     url = "https://uselessfacts.jsph.pl/api/v2/facts/random?language=en"
     facts = []
-    for _ in range(3):
+    for _ in range(2):
         try:
             response = requests.get(url, timeout=3)
             # Catch Redis snapshot failures or invalid responses gracefully
@@ -55,3 +55,14 @@ def fetch_fitting_xkcd():
         except Exception:
             continue
     return {"title": "Wisdom", "img_url": "https://imgs.xkcd.com/comics/wisdom_of_the_ancients.png"}
+
+def fetch_joke_module():
+    url = "https://official-joke-api.appspot.com/random_joke"
+    try:
+        response = requests.get(url, timeout=5)
+        if response.status_code == 200:
+            data = response.json()
+            return {"setup": data['setup'], "punchline": data['punchline']}
+    except Exception as e:
+        print(f"Joke API Error: {e}")
+    return {"setup": "Why do programmers prefer dark mode?", "punchline": "Because light attracts bugs."}
