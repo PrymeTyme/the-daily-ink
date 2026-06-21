@@ -3,7 +3,7 @@ name: Generate The Daily Ink
 on:
   schedule:
     # Runs at 03:00 UTC (5:00 AM local time in summer) every day
-    - cron: '0 3 * * *'
+    - cron: "0 3 * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -14,35 +14,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Install System Dependencies (Chromium)
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y chromium-browser
+      - name: Install System Dependencies (Chromium)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
 
-    - name: Install Python Dependencies
-      run: |
-        pip install -r requirements.txt
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Generate Newspaper
-      env:
-        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
-        # Die Stadt wird als Repository Variable (nicht Secret) übergeben
-        WEATHER_CITY: ${{ vars.WEATHER_CITY }} 
-      run: |
-        python generate.py
+      - name: Generate Newspaper
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          # Die Stadt wird als Repository Variable (nicht Secret) übergeben
+          WEATHER_CITY: ${{ vars.WEATHER_CITY }}
+        run: |
+          python generate.py
 
-    - name: Commit and Push Image
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add -f newspaper.png
-        git commit -m "Auto-update newspaper: $(date -u)" || true
-        git push origin HEAD:main
+      - name: Commit and Push Image
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f newspaper.png
+          git commit -m "Auto-update newspaper: $(date -u)" || true
+          git push origin HEAD:main
