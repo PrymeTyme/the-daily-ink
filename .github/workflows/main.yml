@@ -34,7 +34,7 @@ jobs:
       - name: Generate Newspaper
         env:
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
-          # Die Stadt wird als Repository Variable (nicht Secret) übergeben
+
           WEATHER_CITY: ${{ vars.WEATHER_CITY }}
         run: |
           python generate.py
