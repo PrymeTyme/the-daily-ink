@@ -1,5 +1,5 @@
 venv/
-*.png
 .env
-index.html
 __pycache__/
+index.html
+newspaper.png
