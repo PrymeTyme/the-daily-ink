@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 from html2image import Html2Image
 
 from modules.weather import get_weather
-from modules.news import fetch_wiki_module, fetch_verge_module, fetch_history_module, fetch_sports_module, fetch_good_news_module
-from modules.culture import fetch_facts_module, fetch_word_module, fetch_fitting_xkcd, fetch_joke_module, fetch_quote_module, fetch_recipe_module, fetch_poem_module
+from modules.news import fetch_wiki_module, fetch_verge_module, fetch_history_module, fetch_sports_module, fetch_good_news_module, fetch_curated_news_module
+from modules.culture import fetch_facts_module, fetch_word_module, fetch_fitting_xkcd, fetch_joke_module, fetch_quote_module, fetch_recipe_module, fetch_poem_module, fetch_wiki_roulette_module
 from modules.finance import fetch_crypto_module
 
 load_dotenv()
@@ -39,6 +39,8 @@ def generate_newspaper():
     recipe = fetch_recipe_module()
     poem = fetch_poem_module()
     good_news = fetch_good_news_module()
+    wiki_roulette = fetch_wiki_roulette_module()
+    curated_news = fetch_curated_news_module()
     
     # 2. Build list strings (The only logic needed before injection)
     facts_html = "".join([f"<li>{f}</li>" for f in facts])
@@ -66,7 +68,10 @@ def generate_newspaper():
         "{poem_block}": load_module_html("poem").format(poem=poem),
         "{comic_url}": comic['img_url'],
         "{goodnews_block}": load_module_html("goodnews").format(good_news_title=good_news['title'], good_news_text=good_news['text']),
+        "{wiki_roulette_block}": load_module_html("news").format(news_title=wiki_roulette['title'], news_text=wiki_roulette['text']),
+        "{curated_news_block}": load_module_html("curatednews").format(news_title=curated_news['title'], news_text=curated_news['text']),
     }
+    
 
     # 4. Assemble final page
     with open("templates/layout.html", "r", encoding="utf-8") as f:

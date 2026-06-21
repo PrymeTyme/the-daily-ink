@@ -127,4 +127,26 @@ def fetch_poem_module():
         
     except Exception as e:
         print(f"Poem API Error: {e}")
-        return "<i>Poetry is currently unavailable.</i>"    
+        return "<i>Poetry is currently unavailable.</i>"
+
+def fetch_wiki_roulette_module():
+    """Pulls a short paragraph about a completely random Wikipedia article."""
+    url = "https://en.wikipedia.org/api/rest_v1/page/random/summary"
+    headers = {"User-Agent": "TheDailyInk/1.0"}
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        
+        title = data.get("title", "Random Knowledge")
+        
+        extract = data.get("extract", "No summary available.")
+        
+        return {
+            "title": title, 
+            "text": extract
+        }
+    except Exception as e:
+        print(f"Wiki Roulette Error: {e}")
+        return {"title": "Wiki Roulette", "text": "The library is closed."} 
