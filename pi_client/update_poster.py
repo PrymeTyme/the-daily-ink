@@ -26,7 +26,7 @@ def main():
             # Rotate the image 90 degrees so the Inky display can process it natively
             img = img.rotate(90, expand=True)
 
-        # Resize if the dimensions still don't match the display's native resolution
+        
         if img.size != display.resolution:
             print(f"Resizing image: {img.size} -> {display.resolution}")
             img = img.resize(display.resolution, Image.Resampling.LANCZOS)
