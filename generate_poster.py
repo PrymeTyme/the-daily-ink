@@ -1,4 +1,6 @@
 import os
+import base64
+import requests
 from dotenv import load_dotenv
 from html2image import Html2Image
 from modules.movies import fetch_omdb_poster
@@ -21,12 +23,18 @@ def main():
 
     print(f"Selected Movie: {movie_data['title']} (Rating: {movie_data['rating']})")
 
+    # THE FIX: Download the image in Python and convert to Base64 text
+    print("Downloading high-res poster...")
+    img_response = requests.get(movie_data['poster_url'])
+    img_base64 = base64.b64encode(img_response.content).decode('utf-8')
+    base64_string = f"data:image/jpeg;base64,{img_base64}"
+
     template_path = os.path.join(os.path.dirname(__file__), "templates", "poster.html")
     with open(template_path, "r", encoding="utf-8") as template_file:
         html_template = template_file.read()
 
-    
-    rendered_html = html_template.replace("{poster_url}", movie_data['poster_url'])
+    # Inject the base64 string instead of the URL
+    rendered_html = html_template.replace("{poster_url}", base64_string)
     rendered_html = rendered_html.replace("{movie_rating}", movie_data['rating'])
 
     hti = initialize_renderer()
