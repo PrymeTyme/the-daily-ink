@@ -2,4 +2,5 @@ venv/
 .env
 __pycache__/
 index.html
+poster_index.html
 newspaper.png
