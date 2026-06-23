@@ -43,8 +43,8 @@ def generate_newspaper():
     curated_news = fetch_curated_news_module()
     
     # 2. Build list strings (The only logic needed before injection)
-    facts_html = "".join([f"<li>{f}</li>" for f in facts])
-    history_items = "".join([f'<div style="margin-bottom:8px;"><b>{item["year"]}</b>: {item["text"]}</div>' for item in history['items']])
+    facts_html = "".join([f'<li style="margin-bottom: 6px;">{f}</li>' for f in facts])
+    history_items = "".join([f'<div style="margin-bottom:6px;"><b>{item["year"]}</b>: {item["text"]}</div>' for item in history['items']])
     sports_items = "".join([f'<div style="margin-bottom:6px;"><b>{s["title"]}</b><br/><span style="font-weight:normal;">{s["summary"]}</span></div>' for s in sports])
     
     current_date = datetime.now().strftime("%A, %B %d, %Y").upper()
@@ -68,13 +68,13 @@ def generate_newspaper():
         "{poem_block}": load_module_html("poem").format(poem=poem),
         "{comic_url}": comic['img_url'],
         "{goodnews_block}": load_module_html("goodnews").format(good_news_title=good_news['title'], good_news_text=good_news['text']),
-        "{wiki_roulette_block}": load_module_html("news").format(news_title=wiki_roulette['title'], news_text=wiki_roulette['text']),
+        "{wiki_roulette_block}": load_module_html("wikiroulette").format(news_title=wiki_roulette['title'], news_text=wiki_roulette['text']),
         "{curated_news_block}": load_module_html("curatednews").format(news_title=curated_news['title'], news_text=curated_news['text']),
     }
     
 
     # 4. Assemble final page
-    with open("templates/layout.html", "r", encoding="utf-8") as f:
+    with open("templates/bannerlayout.html", "r", encoding="utf-8") as f:
         rendered_html = f.read()
 
     for tag, value in replacements.items():

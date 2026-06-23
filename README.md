@@ -1,4 +1,5 @@
 # The Daily Ink
+
 <table>
   <tr>
     <td>
@@ -118,6 +119,11 @@ python generate.py
 ## Customizing the Layout & Adding Modules
 
 The Daily Ink uses a **Modular Component System**. You don't need to touch complex layout code; you simply move "Lego-style" blocks around. **Python supplies the data, and HTML organizes the space.**
+
+Layout Examples:
+| Banner Layout | Feature Layout |
+| :---: | :---: |
+| <img src="assets/db.png" width="200" alt="Banner"> | <img src="assets/df.png" width="200" alt="Feature"> |
 
 ### 1. Moving Existing Modules
 

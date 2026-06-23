@@ -59,7 +59,7 @@ def fetch_sports_module():
             items = []
             for entry in feed.entries[:1]:
                 clean_text = strip_html(entry.get('summary', ''))
-                items.append({"title": entry.title, "summary": f"{clean_text[:150]}..."})
+                items.append({"title": entry.title, "summary": f"{clean_text[:200]}..."})
             return items
     except Exception as e:
         print(f"Sports RSS Error: {e}")
