@@ -1,8 +1,11 @@
 name: Generate Daily Newspaper
 
 on:
+  push:
+    branches:
+      - feature/movie-poster
   schedule:
-    - cron: "15 1 * * *" # 1:15 AM UTC (3:15 AM CEST)
+    - cron: "15 13 * * *" # (or '15 1 * * *' for the newspaper)
   workflow_dispatch: {}
 
 jobs:
