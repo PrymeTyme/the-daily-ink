@@ -3,7 +3,7 @@ name: Generate Evening Poster
 on:
   schedule:
     - cron: "15 13 * * *" # 1:15 PM UTC (3:15 PM CEST)
-  workflow_dispatch: # Enables the manual "Run" button
+  workflow_dispatch: {}
 
 jobs:
   build:
