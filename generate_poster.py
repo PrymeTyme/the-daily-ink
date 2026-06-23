@@ -37,10 +37,23 @@ def main():
     rendered_html = html_template.replace("{poster_url}", base64_string)
     rendered_html = rendered_html.replace("{movie_rating}", movie_data['rating'])
 
+    # Render exactly to the Pi's 480x800 resolution
     hti = initialize_renderer()
     print("Rendering poster image...")
+
+    # 1. Save the HTML content to a dedicated physical file
+    poster_index_path = os.path.join(os.path.dirname(__file__), "poster_index.html")
+    with open(poster_index_path, "w", encoding="utf-8") as f:
+        f.write(rendered_html)
+        
+    # 2. Generate the absolute local file URL (replacing backslashes for cross-platform safety)
+    import os
+    absolute_path = os.path.abspath(poster_index_path)
+    file_url = f"file:///{absolute_path.replace(chr(92), '/')}"
+    
+    # 3. Take the screenshot using the absolute URL, keeping your strict size!
     hti.screenshot(
-        html_str=rendered_html, 
+        url=file_url, 
         save_as='poster.png',
         size=(480, 800)
     )
