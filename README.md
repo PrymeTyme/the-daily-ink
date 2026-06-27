@@ -1,4 +1,4 @@
-# The Daily Ink
+# The Daily Ink 
 
 <table>
   <tr>
